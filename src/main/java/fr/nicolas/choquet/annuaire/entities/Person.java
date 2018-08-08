@@ -1,13 +1,14 @@
 package fr.nicolas.choquet.annuaire.entities;
 
 public class Person {
+    private int id;
     private String nom;
     private String prenom;
     private String telephone;
 
     public Person() {}
 
-    public Person(String nom, String prenom, String telephone) {
+    public Person(int id, String nom, String prenom, String telephone) {
         setNom(nom);
         setPrenom(prenom);
         setTelephone(telephone);
@@ -35,5 +36,13 @@ public class Person {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -8,16 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class Fenetre extends JFrame {
-
-    private static String path = "src/main/resources/";
 
     public Fenetre() throws IOException, JSONException {
         this.setTitle("Animation");
@@ -29,50 +25,68 @@ public class Fenetre extends JFrame {
         container.setBackground(Color.white);
         container.setLayout(new BorderLayout());
 
-        String[] options_tab = {"Option 1", "Option 2", "Option 3", "Option 4"};
-        JComboBox combo = new JComboBox(options_tab);
-        combo.addActionListener(new ComboListener(combo));
-        combo.setPreferredSize(new Dimension(100, 20));
+        JMenuBar menuBar = new JMenuBar();
 
-        JPanel comboPanel = new JPanel();
-        JLabel label = new JLabel("Une ComboBox");
-        comboPanel.add(label);
-        comboPanel.add(combo);
+        JMenu menuFichier = new JMenu("Fichiers");
+        JMenu menuRun = new JMenu("Fonctionnement");
 
-        JPanel checkboxPanel = new JPanel();
-        JCheckBox checkbox1 = new JCheckBox("CheckBox 1");
-        JCheckBox checkbox2 = new JCheckBox("CheckBox 2");
+        JMenuItem item1 = new JMenuItem("Ouvrir");
+        JMenuItem item2 = new JMenuItem("Fermer");
+        JMenuItem item3 = new JMenuItem("Lancer");
+        JMenuItem item4 = new JMenuItem("Arrêter");
 
-        checkbox1.addActionListener(new CheckBoxListener());
-        checkbox2.addActionListener(new CheckBoxListener());
+        menuFichier.add(item1);
+        menuFichier.add(item2);
+        menuRun.add(item3);
+        menuRun.add(item4);
 
-        checkboxPanel.add(checkbox1);
-        checkboxPanel.add(checkbox2);
-
-        JPanel radioPanel = new JPanel();
-        ButtonGroup radioButtonGroup = new ButtonGroup();
-        JRadioButton radio1 = new JRadioButton("Radio 1");
-        JRadioButton radio2 = new JRadioButton("Radio 2");
-
-        radio1.addActionListener(new RadioButtonListener());
-        radio2.addActionListener(new RadioButtonListener());
-
-        radioButtonGroup.add(radio1);
-        radioButtonGroup.add(radio2);
-
-        radioPanel.add(radio1);
-        radioPanel.add(radio2);
-
+        menuBar.add(menuFichier);
+        menuBar.add(menuRun);
+//
+//        String[] options_tab = {"Option 1", "Option 2", "Option 3", "Option 4"};
+//        JComboBox combo = new JComboBox(options_tab);
+//        combo.addActionListener(new ComboListener(combo));
+//        combo.setPreferredSize(new Dimension(100, 20));
+//
+//        JPanel comboPanel = new JPanel();
+//        JLabel label = new JLabel("Une ComboBox");
+//        comboPanel.add(label);
+//        comboPanel.add(combo);
+//
+//        JPanel checkboxPanel = new JPanel();
+//        JCheckBox checkbox1 = new JCheckBox("CheckBox 1");
+//        JCheckBox checkbox2 = new JCheckBox("CheckBox 2");
+//
+//        checkbox1.addActionListener(new CheckBoxListener());
+//        checkbox2.addActionListener(new CheckBoxListener());
+//
+//        checkboxPanel.add(checkbox1);
+//        checkboxPanel.add(checkbox2);
+//
+//        JPanel radioPanel = new JPanel();
+//        ButtonGroup radioButtonGroup = new ButtonGroup();
+//        JRadioButton radio1 = new JRadioButton("Radio 1");
+//        JRadioButton radio2 = new JRadioButton("Radio 2");
+//
+//        radio1.addActionListener(new RadioButtonListener());
+//        radio2.addActionListener(new RadioButtonListener());
+//
+//        radioButtonGroup.add(radio1);
+//        radioButtonGroup.add(radio2);
+//
+//        radioPanel.add(radio1);
+//        radioPanel.add(radio2);
+//
+        String path = "src/main/resources/";
         FileWriter fw1 = new FileWriter(path + "fichier1.json");
         BufferedWriter bw1 = new BufferedWriter(fw1);
-        bw1.write("[{\"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}]");
+        bw1.write("[{\"id\": \"0\", \"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}, {\"id\": \"1\", \"nom\": \"Choquet\", \"prenom\": \"Yann\", \"telephone\": \"0763207631\"}, {\"id\": \"2\", \"nom\": \"Loubet\", \"prenom\": \"Karine\", \"telephone\": \"0763207632\"}]");
         bw1.close();
 
         File jsonFile = new File(path + "fichier1.json");
         int car;
-        StringBuilder json = new StringBuilder("");
-        FileInputStream ftemp = null;
-        ftemp = new FileInputStream(jsonFile);
+        StringBuilder json = new StringBuilder();
+        FileInputStream ftemp = new FileInputStream(jsonFile);
         while( (car = ftemp.read()) != -1)
             json.append((char)car);
         ftemp.close();
@@ -84,6 +98,7 @@ public class Fenetre extends JFrame {
             JSONObject personObject = jsonArray.getJSONObject(i);
             persons.add(
                     new Person(
+                            personObject.getInt("id"),
                             personObject.getString("nom"),
                             personObject.getString("prenom"),
                             personObject.getString("telephone")
@@ -92,24 +107,36 @@ public class Fenetre extends JFrame {
         }
 
         JPanel personsPanel = new JPanel();
-        for(int i=0, max=persons.size(); i<max; i++) {
-            Person person = persons.get(i);
+        for (Person person : persons) {
+            JPanel personPanel = new JPanel();
             JTextField nom = new JTextField(person.getNom());
+            nom.setName("nom_" + person.getId());
             JTextField prenom = new JTextField(person.getPrenom());
+            prenom.setName("prenom_" + person.getId());
             JTextField telephone = new JTextField(person.getTelephone());
+            telephone.setName("telephone_" + person.getId());
 
-            personsPanel.add(nom);
-            personsPanel.add(prenom);
-            personsPanel.add(telephone);
+            personPanel.add(nom, BorderLayout.WEST);
+            personPanel.add(prenom, BorderLayout.CENTER);
+            personPanel.add(telephone, BorderLayout.EAST);
+
+            personsPanel.add(personPanel, BorderLayout.NORTH);
         }
 
-        container.add(comboPanel, BorderLayout.NORTH);
-        container.add(checkboxPanel, BorderLayout.CENTER);
-        container.add(radioPanel, BorderLayout.SOUTH);
-        container.add(personsPanel, BorderLayout.AFTER_LAST_LINE);
+//        container.add(comboPanel, BorderLayout.NORTH);
+//        container.add(checkboxPanel, BorderLayout.CENTER);
+//        container.add(radioPanel, BorderLayout.SOUTH);
+
+        JPanel savePanel = new JPanel();
+        JButton saveButton = new JButton("Enregistrer");
+        saveButton.addActionListener(new SaveListener(personsPanel, persons));
+        savePanel.add(saveButton, BorderLayout.EAST);
+
+        container.add(menuBar, BorderLayout.NORTH);
+        container.add(personsPanel, BorderLayout.CENTER);
+        container.add(savePanel, BorderLayout.SOUTH);
 
         this.setContentPane(container);
-
         this.setVisible(true);
     }
 }
