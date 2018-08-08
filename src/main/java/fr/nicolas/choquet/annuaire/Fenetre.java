@@ -26,23 +26,38 @@ public class Fenetre extends JFrame {
         combo.addActionListener(new ComboListener(combo));
         combo.setPreferredSize(new Dimension(100, 20));
 
-        JPanel top = new JPanel();
+        JPanel comboPanel = new JPanel();
         JLabel label = new JLabel("Une ComboBox");
-        top.add(label);
-        top.add(combo);
+        comboPanel.add(label);
+        comboPanel.add(combo);
 
-        JPanel middle = new JPanel();
+        JPanel checkboxPanel = new JPanel();
         JCheckBox checkbox1 = new JCheckBox("CheckBox 1");
         JCheckBox checkbox2 = new JCheckBox("CheckBox 2");
 
         checkbox1.addActionListener(new CheckBoxListener());
         checkbox2.addActionListener(new CheckBoxListener());
 
-        middle.add(checkbox1);
-        middle.add(checkbox2);
+        checkboxPanel.add(checkbox1);
+        checkboxPanel.add(checkbox2);
 
-        container.add(top, BorderLayout.NORTH);
-        container.add(middle, BorderLayout.CENTER);
+        JPanel radioPanel = new JPanel();
+        ButtonGroup radioButtonGroup = new ButtonGroup();
+        JRadioButton radio1 = new JRadioButton("Radio 1");
+        JRadioButton radio2 = new JRadioButton("Radio 2");
+
+        radio1.addActionListener(new RadioButtonListener());
+        radio2.addActionListener(new RadioButtonListener());
+
+        radioButtonGroup.add(radio1);
+        radioButtonGroup.add(radio2);
+
+        radioPanel.add(radio1);
+        radioPanel.add(radio2);
+
+        container.add(comboPanel, BorderLayout.NORTH);
+        container.add(checkboxPanel, BorderLayout.CENTER);
+        container.add(radioPanel, BorderLayout.SOUTH);
 
         this.setContentPane(container);
 
