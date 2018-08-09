@@ -1,24 +1,24 @@
 package fr.nicolas.choquet.annuaire;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import fr.nicolas.choquet.annuaire.entities.Person;
+import fr.nicolas.choquet.annuaire.utils.File;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
 
 public class Fenetre extends JFrame {
 
     public Fenetre() throws IOException, JSONException {
-        this.setTitle("Animation");
-        this.setSize(300, 300);
+        this.setTitle("Annuaire");
+        Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        int height = (int)dimension.getHeight();
+        int width  = (int)dimension.getWidth();
+        this.setSize(width-5, height-5);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
@@ -32,7 +32,9 @@ public class Fenetre extends JFrame {
         JMenu menuRun = new JMenu("Fonctionnement");
 
         JMenuItem item1 = new JMenuItem("Ouvrir");
+        item1.addActionListener(new MenuItemListener());
         JMenuItem item2 = new JMenuItem("Fermer");
+        item2.addActionListener(new MenuItemListener(this));
         JMenuItem item3 = new JMenuItem("Lancer");
         JMenuItem item4 = new JMenuItem("Arrêter");
 
@@ -43,55 +45,12 @@ public class Fenetre extends JFrame {
 
         menuBar.add(menuFichier);
         menuBar.add(menuRun);
-//
-//        String[] options_tab = {"Option 1", "Option 2", "Option 3", "Option 4"};
-//        JComboBox combo = new JComboBox(options_tab);
-//        combo.addActionListener(new ComboListener(combo));
-//        combo.setPreferredSize(new Dimension(100, 20));
-//
-//        JPanel comboPanel = new JPanel();
-//        JLabel label = new JLabel("Une ComboBox");
-//        comboPanel.add(label);
-//        comboPanel.add(combo);
-//
-//        JPanel checkboxPanel = new JPanel();
-//        JCheckBox checkbox1 = new JCheckBox("CheckBox 1");
-//        JCheckBox checkbox2 = new JCheckBox("CheckBox 2");
-//
-//        checkbox1.addActionListener(new CheckBoxListener());
-//        checkbox2.addActionListener(new CheckBoxListener());
-//
-//        checkboxPanel.add(checkbox1);
-//        checkboxPanel.add(checkbox2);
-//
-//        JPanel radioPanel = new JPanel();
-//        ButtonGroup radioButtonGroup = new ButtonGroup();
-//        JRadioButton radio1 = new JRadioButton("Radio 1");
-//        JRadioButton radio2 = new JRadioButton("Radio 2");
-//
-//        radio1.addActionListener(new RadioButtonListener());
-//        radio2.addActionListener(new RadioButtonListener());
-//
-//        radioButtonGroup.add(radio1);
-//        radioButtonGroup.add(radio2);
-//
-//        radioPanel.add(radio1);
-//        radioPanel.add(radio2);
-//
-        String path = "src/main/resources/";
-        FileWriter fw1 = new FileWriter(path + "fichier1.json");
-        BufferedWriter bw1 = new BufferedWriter(fw1);
-        bw1.write("[{\"id\": \"0\", \"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}, {\"id\": \"1\", \"nom\": \"Choquet\", \"prenom\": \"Yann\", \"telephone\": \"0763207631\"}, {\"id\": \"2\", \"nom\": \"Loubet\", \"prenom\": \"Karine\", \"telephone\": \"0763207632\"}]");
-        bw1.close();
 
-        File jsonFile = new File(path + "fichier1.json");
-        int car;
-        StringBuilder json = new StringBuilder();
-        FileInputStream ftemp = new FileInputStream(jsonFile);
-        while( (car = ftemp.read()) != -1)
-            json.append((char)car);
-        ftemp.close();
-        String jsonText = json.toString();
+        File file = new File("fichier1.json");
+
+        file.write("[{\"id\": \"0\", \"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}, {\"id\": \"1\", \"nom\": \"Choquet\", \"prenom\": \"Yann\", \"telephone\": \"0763207631\"}, {\"id\": \"2\", \"nom\": \"Loubet\", \"prenom\": \"Karine\", \"telephone\": \"0763207632\"}]");
+
+        String jsonText = file.read();
         ArrayList<Person> persons = new ArrayList<Person>();
 
         JSONArray jsonArray = new JSONArray(jsonText);
@@ -119,12 +78,8 @@ public class Fenetre extends JFrame {
         }
 
         JTable tableau = new JTable(tmp_persons, entetes);
-        tableau.getCellEditor(0,1).addCellEditorListener(new TableColChangeListener());
+        tableau.getCellEditor(0,1).addCellEditorListener(new TableColChangeListener(tableau, "fichier1.json"));
         personsPanel.add(tableau);
-
-//        container.add(comboPanel, BorderLayout.NORTH);
-//        container.add(checkboxPanel, BorderLayout.CENTER);
-//        container.add(radioPanel, BorderLayout.SOUTH);
 
         container.add(menuBar, BorderLayout.NORTH);
         container.add(personsPanel, BorderLayout.CENTER);
