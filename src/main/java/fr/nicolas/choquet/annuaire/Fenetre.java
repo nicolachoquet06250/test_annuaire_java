@@ -12,6 +12,7 @@ import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
 
 public class Fenetre extends JFrame {
 
@@ -107,34 +108,26 @@ public class Fenetre extends JFrame {
         }
 
         JPanel personsPanel = new JPanel();
-        for (Person person : persons) {
-            JPanel personPanel = new JPanel();
-            JTextField nom = new JTextField(person.getNom());
-            nom.setName("nom_" + person.getId());
-            JTextField prenom = new JTextField(person.getPrenom());
-            prenom.setName("prenom_" + person.getId());
-            JTextField telephone = new JTextField(person.getTelephone());
-            telephone.setName("telephone_" + person.getId());
 
-            personPanel.add(nom, BorderLayout.WEST);
-            personPanel.add(prenom, BorderLayout.CENTER);
-            personPanel.add(telephone, BorderLayout.EAST);
-
-            personsPanel.add(personPanel, BorderLayout.NORTH);
+        String[] entetes = {"Id", "Nom", "Prenom", "Téléphone"};
+        Object[][] tmp_persons = new Object[persons.size()+1][4];
+        int i = 0;
+        for(Person person : persons) {
+            Object[] tmp_person = {person.getId(), person.getNom(), person.getPrenom(), person.getTelephone()};
+            tmp_persons[i] = tmp_person;
+            i++;
         }
+
+        JTable tableau = new JTable(tmp_persons, entetes);
+        tableau.getCellEditor(0,1).addCellEditorListener(new TableColChangeListener());
+        personsPanel.add(tableau);
 
 //        container.add(comboPanel, BorderLayout.NORTH);
 //        container.add(checkboxPanel, BorderLayout.CENTER);
 //        container.add(radioPanel, BorderLayout.SOUTH);
 
-        JPanel savePanel = new JPanel();
-        JButton saveButton = new JButton("Enregistrer");
-        saveButton.addActionListener(new SaveListener(personsPanel, persons));
-        savePanel.add(saveButton, BorderLayout.EAST);
-
         container.add(menuBar, BorderLayout.NORTH);
         container.add(personsPanel, BorderLayout.CENTER);
-        container.add(savePanel, BorderLayout.SOUTH);
 
         this.setContentPane(container);
         this.setVisible(true);

@@ -9,6 +9,7 @@ public class Person {
     public Person() {}
 
     public Person(int id, String nom, String prenom, String telephone) {
+        setId(id);
         setNom(nom);
         setPrenom(prenom);
         setTelephone(telephone);

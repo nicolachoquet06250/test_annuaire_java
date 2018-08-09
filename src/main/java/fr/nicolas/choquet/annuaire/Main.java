@@ -2,7 +2,6 @@ package fr.nicolas.choquet.annuaire;
 
 import org.json.JSONException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
