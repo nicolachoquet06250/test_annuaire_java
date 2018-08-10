@@ -7,8 +7,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PersonArray {
     private ArrayList<Person> persons;
@@ -18,11 +16,7 @@ public class PersonArray {
         setPersons(persons);
     }
 
-    public static PersonArray initialize() {
-        return new PersonArray(new ArrayList<Person>());
-    }
-
-    public static PersonArray initialize(String json) throws JSONException {
+    static PersonArray initialize(String json) throws JSONException {
         PersonArray personArray = new PersonArray(new ArrayList<Person>());
         personArray.setJsonInitText(json);
         personArray.createFromJson();
@@ -30,23 +24,22 @@ public class PersonArray {
         return personArray;
     }
 
-    public void setPersons(ArrayList<Person> persons) {
+    private void setPersons(ArrayList<Person> persons) {
         this.persons = persons;
     }
 
-    public Person get(int i) {
+    Person get(int i) {
         return persons.get(i);
     }
-
-    public ArrayList<Person> get() {
+    ArrayList<Person> get() {
         return persons;
     }
 
-    public void add(Person person) {
+    void add(Person person) {
         persons.add(person);
     }
 
-    public PersonArray update(int i, String prop, String value) {
+    PersonArray update(int i, String prop, String value) {
         Person person = get(i);
         if(prop.equals("nom")) {
             person.setNom(value);
@@ -59,21 +52,19 @@ public class PersonArray {
         }
         return this;
     }
-
-    public PersonArray update(int i, String prop, int value) {
+    PersonArray update(int i, String prop, int value) {
         Person person = get(i);
         if(prop.equals("id")) {
             person.setId(value);
         }
         return this;
     }
-
-    public PersonArray delete(int i) {
+    PersonArray delete(int i) {
         persons.remove(i);
         return this;
     }
 
-    public PersonArray delete(String champ, String value) {
+    PersonArray delete(String champ, String value) {
         int i = 0;
         for (Person person: persons) {
             if((champ.equals("nom") && person.getNom().equals(value)) ||
@@ -85,8 +76,7 @@ public class PersonArray {
         }
         return this;
     }
-
-    public PersonArray delete(String champ, int value) {
+    PersonArray delete(String champ, int value) {
         int i = 0;
         for (Person person: persons) {
             if((champ.equals("id") && person.getId() == value)) {
@@ -97,11 +87,11 @@ public class PersonArray {
         return this;
     }
 
-    public int size() {
+    int size() {
         return persons.size();
     }
 
-    public Object[][] toObjectArray() throws UnsupportedEncodingException {
+    Object[][] toObjectArray() throws UnsupportedEncodingException {
         Object[][] tmp_persons = new Object[this.size()+1][4];
         int i = 0;
         for(Person person : this.get()) {
@@ -117,7 +107,7 @@ public class PersonArray {
         return tmp_persons;
     }
 
-    public String toJson() {
+    String toJson() {
         StringBuilder json = new StringBuilder("[");
         for (Person person: persons) {
             json.append(person.toJson() + ", ");
@@ -127,8 +117,7 @@ public class PersonArray {
         String jsonText = json.toString().replace("}, ]", "}]");
         return jsonText;
     }
-
-    public JSONArray createFromJson() throws JSONException {
+    private JSONArray createFromJson() throws JSONException {
         JSONArray jsonArray = new JSONArray(this.jsonInitText);
         for(int i=0, max=jsonArray.length(); i<max; i++) {
             JSONObject personObject = jsonArray.getJSONObject(i);
@@ -142,15 +131,13 @@ public class PersonArray {
             );
         }
         personJson = jsonArray;
-        return jsonArray;
+        return personJson;
     }
-
-    public JSONArray toJsonArray() throws JSONException {
+    JSONArray toJsonArray() throws JSONException {
         personJson = new JSONArray(this.toJson());
         return personJson;
     }
-
-    public void setJsonInitText(String jsonInitText) {
+    private void setJsonInitText(String jsonInitText) {
         this.jsonInitText = jsonInitText;
     }
 }

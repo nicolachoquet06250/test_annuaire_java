@@ -6,8 +6,6 @@ public class Person {
     private String prenom;
     private String telephone;
 
-    public Person() {}
-
     public Person(int id, String nom, String prenom, String telephone) {
         setId(id);
         setNom(nom);
@@ -56,7 +54,6 @@ public class Person {
     }
 
     public Object[] getHeader() {
-        Object[] header = {"Id", "Nom", "Prenom", "Téléphone"};
-        return header;
+        return new Object[]{"Id", "Nom", "Prenom", "Téléphone"};
     }
 }

@@ -6,32 +6,39 @@ import org.json.JSONException;
 import javax.swing.*;
 import java.io.UnsupportedEncodingException;
 
-public class JsonTable extends JTable {
+class JsonTable extends JTable {
     private JSONArray jsonArray;
     private PersonArray personArray;
     private Object[] header;
-    public JsonTable(PersonArray personArray) throws JSONException, UnsupportedEncodingException {
+    JsonTable(PersonArray personArray) throws JSONException, UnsupportedEncodingException {
         super(personArray.toObjectArray(), personArray.get(0).getHeader());
 
         setJsonArray(personArray.toJsonArray());
         setHeader(personArray.get(0).getHeader());
         setPersonArray(personArray);
-        initialize();
     }
 
-    public void initialize() {
-
-    }
-
-    public void setJsonArray(JSONArray jsonArray) {
+    private void setJsonArray(JSONArray jsonArray) {
         this.jsonArray = jsonArray;
     }
 
-    public void setPersonArray(PersonArray personArray) {
+    private void setPersonArray(PersonArray personArray) {
         this.personArray = personArray;
     }
 
-    public void setHeader(Object[] header) {
+    private void setHeader(Object[] header) {
         this.header = header;
+    }
+
+    JSONArray getJsonArray() {
+        return jsonArray;
+    }
+
+    PersonArray getPersonArray() {
+        return personArray;
+    }
+
+    Object[] getHeader() {
+        return header;
     }
 }
