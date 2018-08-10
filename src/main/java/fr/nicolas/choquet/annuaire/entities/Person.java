@@ -54,4 +54,9 @@ public class Person {
     public String toJson() {
         return "{\"id\":\"" + getId() + "\", \"nom\":\"" + getNom() + "\", \"prenom\":\"" + getPrenom() + "\", \"telephone\":\"" + getTelephone() + "\"}";
     }
+
+    public Object[] getHeader() {
+        Object[] header = {"Id", "Nom", "Prenom", "Téléphone"};
+        return header;
+    }
 }

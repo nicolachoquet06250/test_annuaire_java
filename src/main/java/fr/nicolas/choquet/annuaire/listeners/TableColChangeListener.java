@@ -1,5 +1,6 @@
-package fr.nicolas.choquet.annuaire;
+package fr.nicolas.choquet.annuaire.listeners;
 
+import fr.nicolas.choquet.annuaire.components.Fenetre;
 import fr.nicolas.choquet.annuaire.entities.Person;
 import fr.nicolas.choquet.annuaire.utils.File;
 import org.json.JSONArray;
@@ -12,7 +13,6 @@ import javax.swing.event.ChangeEvent;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TableColChangeListener implements CellEditorListener {
 
@@ -20,7 +20,7 @@ public class TableColChangeListener implements CellEditorListener {
     private String file;
     private Fenetre fenetre;
 
-    TableColChangeListener(Fenetre fenetre, JTable table, String file) {
+    public TableColChangeListener(Fenetre fenetre, JTable table, String file) {
         setTable(table);
         setFile(file);
         setFenetre(fenetre);

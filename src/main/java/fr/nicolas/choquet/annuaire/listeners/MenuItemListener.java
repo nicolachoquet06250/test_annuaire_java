@@ -1,9 +1,10 @@
-package fr.nicolas.choquet.annuaire;
+package fr.nicolas.choquet.annuaire.listeners;
 
 import com.sun.istack.internal.Nullable;
+import fr.nicolas.choquet.annuaire.components.Fenetre;
+import fr.nicolas.choquet.annuaire.Main;
 import org.json.JSONException;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -29,6 +30,10 @@ public class MenuItemListener implements ActionListener {
             if(getFenetre() != null) {
                 getFenetre().dispose();
             }
+        }
+        else if (e.getActionCommand().equals("Redémarrer")) {
+            fenetre.dispose();
+            Main.main();
         }
     }
 
