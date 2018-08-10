@@ -15,6 +15,10 @@ public class Person {
         setTelephone(telephone);
     }
 
+    public static Person create(int id, String nom, String prenom, String telephone) {
+        return new Person(id, nom, prenom, telephone);
+    }
+
     public String getPrenom() {
         return prenom;
     }

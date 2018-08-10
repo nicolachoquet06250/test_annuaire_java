@@ -48,7 +48,7 @@ public class Fenetre extends JFrame {
 
         File file = new File("fichier1.json");
 
-        file.write("[{\"id\": \"0\", \"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}, {\"id\": \"1\", \"nom\": \"Choquet\", \"prenom\": \"Yann\", \"telephone\": \"0763207631\"}, {\"id\": \"2\", \"nom\": \"Loubet\", \"prenom\": \"Karine\", \"telephone\": \"0763207632\"}]");
+//        file.write("[{\"id\": \"0\", \"nom\": \"Choquet\", \"prenom\": \"Nicolas\", \"telephone\": \"0763207630\"}, {\"id\": \"1\", \"nom\": \"Choquet\", \"prenom\": \"Yann\", \"telephone\": \"0763207631\"}, {\"id\": \"2\", \"nom\": \"Loubet\", \"prenom\": \"Karine\", \"telephone\": \"0763207632\"}]");
 
         String jsonText = file.read();
         ArrayList<Person> persons = new ArrayList<Person>();
@@ -78,7 +78,7 @@ public class Fenetre extends JFrame {
         }
 
         JTable tableau = new JTable(tmp_persons, entetes);
-        tableau.getCellEditor(0,1).addCellEditorListener(new TableColChangeListener(tableau, "fichier1.json"));
+        tableau.getCellEditor(0,1).addCellEditorListener(new TableColChangeListener(this, tableau, "fichier1.json"));
         personsPanel.add(tableau);
 
         container.add(menuBar, BorderLayout.NORTH);
