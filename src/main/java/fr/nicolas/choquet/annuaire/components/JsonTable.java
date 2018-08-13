@@ -10,6 +10,7 @@ class JsonTable extends JTable {
     private JSONArray jsonArray;
     private PersonArray personArray;
     private Object[] header;
+
     JsonTable(PersonArray personArray) throws JSONException, UnsupportedEncodingException {
         super(personArray.toObjectArray(), personArray.get(0).getHeader());
 

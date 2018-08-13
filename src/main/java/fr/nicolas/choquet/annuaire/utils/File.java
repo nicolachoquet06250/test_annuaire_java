@@ -4,6 +4,7 @@ import java.io.*;
 
 public class File {
     private String path = "src/main/resources/";
+    private static String staticPath = "src/main/resources/";
     private String fileName;
 
     public File(String file) {
@@ -46,5 +47,13 @@ public class File {
         catch (FileNotFoundException e) {}
         catch (IOException e) {}
         return retour;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public static String getStaticPath() {
+        return staticPath;
     }
 }

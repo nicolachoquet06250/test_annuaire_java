@@ -6,6 +6,7 @@ public class Person {
     private String prenom;
     private String telephone;
 
+    Person() {}
     public Person(int id, String nom, String prenom, String telephone) {
         setId(id);
         setNom(nom);
@@ -13,6 +14,9 @@ public class Person {
         setTelephone(telephone);
     }
 
+    public static Person create() {
+        return new Person();
+    }
     public static Person create(int id, String nom, String prenom, String telephone) {
         return new Person(id, nom, prenom, telephone);
     }

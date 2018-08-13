@@ -1,6 +1,7 @@
 package fr.nicolas.choquet.annuaire.components;
 
 import fr.nicolas.choquet.annuaire.entities.Person;
+import fr.nicolas.choquet.annuaire.utils.File;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -139,5 +140,67 @@ public class PersonArray {
     }
     private void setJsonInitText(String jsonInitText) {
         this.jsonInitText = jsonInitText;
+    }
+
+
+    public static Person getPersonFromId(int id) throws JSONException {
+        Person person = Person.create();
+        File file = new File(File.getStaticPath());
+        PersonArray persons = PersonArray.initialize(file.read());
+        for (Person localPerson : persons.get()) {
+            if(localPerson.getId() == id) {
+                person.setId(localPerson.getId());
+                person.setNom(localPerson.getNom());
+                person.setPrenom(localPerson.getPrenom());
+                person.setTelephone(localPerson.getTelephone());
+                break;
+            }
+        }
+        return person;
+    }
+    public static Person getPersonFromNom(String nom) throws JSONException {
+        Person person = Person.create();
+        File file = new File(File.getStaticPath());
+        PersonArray persons = PersonArray.initialize(file.read());
+        for (Person localPerson : persons.get()) {
+            if(localPerson.getNom().equals(nom)) {
+                person.setId(localPerson.getId());
+                person.setNom(localPerson.getNom());
+                person.setPrenom(localPerson.getPrenom());
+                person.setTelephone(localPerson.getTelephone());
+                break;
+            }
+        }
+        return person;
+    }
+    public static Person getPersonFromPrenom(String prenom) throws JSONException {
+        Person person = Person.create();
+        File file = new File(File.getStaticPath());
+        PersonArray persons = PersonArray.initialize(file.read());
+        for (Person localPerson : persons.get()) {
+            if(localPerson.getPrenom().equals(prenom)) {
+                person.setId(localPerson.getId());
+                person.setNom(localPerson.getNom());
+                person.setPrenom(localPerson.getPrenom());
+                person.setTelephone(localPerson.getTelephone());
+                break;
+            }
+        }
+        return person;
+    }
+    public static Person getPersonFromTelephone(String telephone) throws JSONException {
+        Person person = Person.create();
+        File file = new File(File.getStaticPath());
+        PersonArray persons = PersonArray.initialize(file.read());
+        for (Person localPerson : persons.get()) {
+            if(localPerson.getTelephone().equals(telephone)) {
+                person.setId(localPerson.getId());
+                person.setNom(localPerson.getNom());
+                person.setPrenom(localPerson.getPrenom());
+                person.setTelephone(localPerson.getTelephone());
+                break;
+            }
+        }
+        return person;
     }
 }
