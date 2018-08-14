@@ -1,5 +1,6 @@
 package fr.nicolas.choquet.annuaire;
 
+import fr.nicolas.choquet.annuaire.components.ExempleBoxLayout;
 import fr.nicolas.choquet.annuaire.components.Fenetre;
 import fr.nicolas.choquet.annuaire.components.mysql.Field;
 import fr.nicolas.choquet.annuaire.components.mysql.Mysql;
@@ -23,18 +24,20 @@ public class Main {
 //            e.printStackTrace();
 //        }
 
-        try {
-            Mysql mysql = Mysql.get("mysql-nicolas-choquet.alwaysdata.net", "143175", "2669NICOLAS2107");
-            mysql.setDatabase("nicolas-choquet_budgets");
-            mysql.connect("nicolas-choquet_budgets");
+        ExempleBoxLayout.main(argv);
 
-            mysql.request("SELECT * FROM " + mysql.getDatabase() + ".account a WHERE a.id > 3").query(Person.class);
-
-            mysql.select().from(mysql.getDatabase(".") + "account a")
-                    .query(Person.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Mysql mysql = Mysql.get("mysql-nicolas-choquet.alwaysdata.net", "143175", "2669NICOLAS2107");
+//            mysql.setDatabase("nicolas-choquet_budgets");
+//            mysql.connect("nicolas-choquet_budgets");
+//
+//            mysql.request("SELECT * FROM " + mysql.getDatabase() + ".account a WHERE a.id > 3").query(Person.class);
+//
+//            mysql.select().from(mysql.getDatabase(".") + "account a")
+//                    .query(Person.class);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void main() {

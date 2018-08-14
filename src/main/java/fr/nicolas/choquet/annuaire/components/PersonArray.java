@@ -203,4 +203,8 @@ public class PersonArray {
         }
         return person;
     }
+
+    public int getLastId() {
+        return get(get().size()-1).getId();
+    }
 }
