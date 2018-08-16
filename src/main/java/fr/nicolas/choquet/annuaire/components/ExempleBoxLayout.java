@@ -2,6 +2,7 @@ package fr.nicolas.choquet.annuaire.components;
 
 import fr.nicolas.choquet.annuaire.entities.JTextFieldFocusListener;
 import fr.nicolas.choquet.annuaire.entities.Person;
+import fr.nicolas.choquet.annuaire.listeners.JButtonActionLitener;
 import fr.nicolas.choquet.annuaire.listeners.JTextFieldActionListener;
 import fr.nicolas.choquet.annuaire.listeners.saveNewPersonActionListener;
 import fr.nicolas.choquet.annuaire.utils.File;
@@ -10,20 +11,12 @@ import org.json.JSONException;
 import java.awt.*;
 import java.io.UnsupportedEncodingException;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 public class ExempleBoxLayout extends JFrame {
 
     private static String file = "fichier1.json";
+    private JPanel panel = null;
 
     @Override
     protected void frameInit() {
@@ -32,6 +25,7 @@ public class ExempleBoxLayout extends JFrame {
         setName("Annuaire");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(550, 200));
         getContentPane()
                 .setLayout(
                         new BoxLayout(
@@ -40,31 +34,44 @@ public class ExempleBoxLayout extends JFrame {
                         )
                 );
 
+        setScrollPane();
+
         File file = new File(ExempleBoxLayout.file);
 
         try {
             PersonArray personArray = PersonArray.initialize(file.read());
 
             for (Person person : personArray.get()) {
-                addRow( person.getId(),
-                        new JTextField[] {
-                                new JTextField(new String(person.getNom().getBytes("iso-8859-1"), "utf8")),
-                                new JTextField(new String(person.getPrenom().getBytes("iso-8859-1"), "utf8")),
-                                new JTextField(person.getTelephone())
-                        });
+                MyJTextField[] localMyJTextFields = new MyJTextField[] {
+                        new MyJTextField(new String(person.getNom().getBytes("iso-8859-1"), "utf8")),
+                        new MyJTextField(new String(person.getPrenom().getBytes("iso-8859-1"), "utf8")),
+                        new MyJTextField(person.getTelephone())
+                };
+
+                JButton update = new JButton("Modifier");
+                update.addActionListener(new JButtonActionLitener(person.getId(), localMyJTextFields));
+
+                JButton delete = new JButton("Supprimer");
+                delete.addActionListener(new JButtonActionLitener(person.getId()));
+
+                JButton[] localJButtons = new JButton[] {update, delete};
+                addRow(
+                        person.getId(),
+                        localMyJTextFields,
+                        localJButtons
+                );
             }
 
-            JTextField nom = new JTextField("Nom");
+            int nextId = personArray.getLastId()+1;
+
+            JTextField nom = new MyJTextField("Nom");
             nom.addFocusListener(new JTextFieldFocusListener("Nom", nom));
-            nom.addActionListener(new JTextFieldActionListener());
 
-            JTextField prenom = new JTextField("Prénom");
+            JTextField prenom = new MyJTextField("Prénom");
             prenom.addFocusListener(new JTextFieldFocusListener("Prénom", prenom));
-            prenom.addActionListener(new JTextFieldActionListener());
 
-            JTextField telephone = new JTextField("Téléphone");
+            JTextField telephone = new MyJTextField("Téléphone");
             telephone.addFocusListener(new JTextFieldFocusListener("Téléphone", telephone));
-            telephone.addActionListener(new JTextFieldActionListener());
 
             JTextField[] jTextFields = new JTextField[] {
                     nom,
@@ -72,12 +79,14 @@ public class ExempleBoxLayout extends JFrame {
                     telephone
             };
 
-            addRow( personArray.getLastId()+1, jTextFields);
 
-            JButton okButton = new JButton("Ajouter");
-            okButton.addActionListener(new saveNewPersonActionListener(jTextFields));
+            JButton okButton = new JButton("Créer");
+            okButton.addActionListener(new saveNewPersonActionListener(jTextFields, nextId));
+            JButton[] jButtonFields = new JButton[] {
+                    okButton
+            };
 
-            addButtons(okButton, new JButton("Annuler"));
+            addRow( nextId, jTextFields, jButtonFields);
 
         } catch (JSONException e) {
             addErrorRow(e.getMessage());
@@ -90,24 +99,36 @@ public class ExempleBoxLayout extends JFrame {
         setResizable(true);
     }
 
-    private void addRow(String titre, JComponent... components) {
+    private void addRow(String titre, JComponent[] components, JButton[] buttons) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(5, 20, 5, 20));
 
-        JLabel label = new JLabel(titre);
-        label.setLabelFor(components[0]);
-        panel.add(label);
+        MyJTextField titleTextField = new MyJTextField(titre);
+        titleTextField.setEnabled(false);
+
+//        JLabel label = new JLabel(titre);
+//        label.setLabelFor(components[0]);
+//        panel.add(label);
+        panel.add(titleTextField);
 
         for (JComponent component : components) {
             panel.add(Box.createHorizontalStrut(10));
             panel.add(component);
         }
-        add(panel);
+        for(JButton button : buttons) {
+            panel.add(Box.createHorizontalStrut(10));
+            panel.add(button);
+        }
+        if(hasScrollPane()) {
+            this.panel.add(panel);
+        }
+        else {
+            add(panel);
+        }
     }
-
-    private void addRow(int titre, JComponent... components) {
-        addRow(String.valueOf(titre), components);
+    private void addRow(int titre, JComponent[] components, JButton[] buttons) {
+        addRow(String.valueOf(titre), components, buttons);
     }
 
     private void addErrorRow(String error) {
@@ -117,17 +138,29 @@ public class ExempleBoxLayout extends JFrame {
 
         JLabel text = new JLabel(error);
         text.setBackground(Color.RED);
-        panel.add(text);
+
+        if(hasScrollPane()) {
+            this.panel.add(text);
+        }
+        else {
+            add(text);
+        }
         add(panel);
     }
 
-    private void addButtons(JButton...buttons) {
-        FlowLayout flowLayout = new FlowLayout(FlowLayout.RIGHT);
-        JPanel panel = new JPanel(flowLayout);
-        for (JButton button : buttons) {
-            panel.add(button);
-        }
-        add(panel);
+    private void setScrollPane() {
+        JPanel panel = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        this.panel = panel;
+
+        this.panel.add(Box.createVerticalGlue());
+        getContentPane().add(scrollPane);
+    }
+
+    private boolean hasScrollPane() {
+        return panel != null;
     }
 
     public static void main(String[] args) {
