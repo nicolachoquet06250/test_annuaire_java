@@ -1,4 +1,4 @@
-package fr.nicolas.choquet.annuaire.entities;
+package fr.nicolas.choquet.annuaire.listeners;
 
 import javax.swing.*;
 import java.awt.event.FocusEvent;

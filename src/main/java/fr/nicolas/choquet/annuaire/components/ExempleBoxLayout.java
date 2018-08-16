@@ -1,9 +1,9 @@
 package fr.nicolas.choquet.annuaire.components;
 
-import fr.nicolas.choquet.annuaire.entities.JTextFieldFocusListener;
+import fr.nicolas.choquet.annuaire.components.custom.MyJTextField;
+import fr.nicolas.choquet.annuaire.listeners.JTextFieldFocusListener;
 import fr.nicolas.choquet.annuaire.entities.Person;
 import fr.nicolas.choquet.annuaire.listeners.JButtonActionLitener;
-import fr.nicolas.choquet.annuaire.listeners.JTextFieldActionListener;
 import fr.nicolas.choquet.annuaire.listeners.saveNewPersonActionListener;
 import fr.nicolas.choquet.annuaire.utils.File;
 import org.json.JSONException;
@@ -166,6 +166,12 @@ public class ExempleBoxLayout extends JFrame {
     }
 
     public static void main(String[] args) {
+        JFrame window = new ExempleBoxLayout();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+    }
+
+    public static void main() {
         JFrame window = new ExempleBoxLayout();
         window.setLocationRelativeTo(null);
         window.setVisible(true);

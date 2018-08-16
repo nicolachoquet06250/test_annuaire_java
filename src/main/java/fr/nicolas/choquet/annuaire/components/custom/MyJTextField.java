@@ -1,4 +1,4 @@
-package fr.nicolas.choquet.annuaire.components;
+package fr.nicolas.choquet.annuaire.components.custom;
 
 
 import java.awt.Rectangle;
@@ -12,7 +12,7 @@ public class MyJTextField extends JTextField {
 
     static final int HEIGHT = 20;
 
-    MyJTextField(String text) {
+    public MyJTextField(String text) {
         super(text);
     }
 
