@@ -1,6 +1,7 @@
 package fr.nicolas.choquet.annuaire;
 
 import fr.nicolas.choquet.annuaire.entities.Person;
+import fr.nicolas.choquet.annuaire.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,9 +26,9 @@ public class TestReflexion {
         setObject(getObjectClass().newInstance());
     }
 
-    public String getString(String champ) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public String getString(String champ) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         if(isString(champ)) {
-            Method set=getObjectClass().getMethod("get" + champ.substring(0, 1).toUpperCase()+ champ.substring(1).toLowerCase());
+            Method set=getObjectClass().getMethod("get" + Utils.ucfist(champ));
             Object retour = set.invoke(getObject());
             return retour.toString();
         }
@@ -35,30 +36,30 @@ public class TestReflexion {
     }
     public int getInt(String champ) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(isInt(champ)) {
-            Method set=getObjectClass().getMethod("get" + champ.substring(0, 1).toUpperCase()+ champ.substring(1).toLowerCase());
+            Method set=getObjectClass().getMethod("get" + Utils.ucfist(champ));
             Object retour = set.invoke(getObject());
             return Integer.parseInt(retour.toString());
         }
         return 0;
     }
 
-    public void set(String champ, String value) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void set(String champ, String value) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(isString(champ)) {
-            Method set=getObjectClass().getMethod("set" + champ.substring(0, 1).toUpperCase()+ champ.substring(1).toLowerCase(), String.class);
+            Method set=getObjectClass().getMethod("set" + Utils.ucfist(champ), String.class);
             set.invoke(getObject(), value);
         }
     }
     public void set(String champ, int value) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         if(isInt(champ)) {
-            Method set=getObjectClass().getMethod("set" + champ.substring(0, 1).toUpperCase()+ champ.substring(1).toLowerCase(), int.class);
+            Method set=getObjectClass().getMethod("set" + Utils.ucfist(champ), int.class);
             set.invoke(getObject(), value);
         }
     }
 
     public boolean hasIntField(String field) {
         try {
-            getObjectClass().getMethod("get" + field.substring(0, 1).toUpperCase()+ field.substring(1).toLowerCase());
-            getObjectClass().getMethod("set" + field.substring(0, 1).toUpperCase()+ field.substring(1).toLowerCase(), int.class);
+            getObjectClass().getMethod("get" + Utils.ucfist(field));
+            getObjectClass().getMethod("set" + Utils.ucfist(field), int.class);
             return true;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -68,8 +69,8 @@ public class TestReflexion {
 
     public boolean hasStringField(String field) {
         try {
-            getObjectClass().getMethod("get" + field.substring(0, 1).toUpperCase()+ field.substring(1).toLowerCase());
-            getObjectClass().getMethod("set" + field.substring(0, 1).toUpperCase()+ field.substring(1).toLowerCase(), String.class);
+            getObjectClass().getMethod("get" + Utils.ucfist(field));
+            getObjectClass().getMethod("set" + Utils.ucfist(field), String.class);
             return true;
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -77,18 +78,12 @@ public class TestReflexion {
         }
     }
 
-    public boolean isString(String champ) throws NoSuchFieldException {
-        if(hasStringField(champ)) {
-            return true;
-        }
-        return false;
+    public boolean isString(String champ) {
+        return hasStringField(champ);
     }
 
-    public boolean isInt(String champ) throws NoSuchFieldException {
-        if(hasIntField(champ)) {
-            return true;
-        }
-        return false;
+    public boolean isInt(String champ) {
+        return hasIntField(champ);
     }
 
     public boolean hasMethod(String name) {
