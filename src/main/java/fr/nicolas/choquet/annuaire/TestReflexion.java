@@ -26,6 +26,38 @@ public class TestReflexion {
         setObject(getObjectClass().newInstance());
     }
 
+    public TestReflexion(String classPackage, String classStr, Object[][] fields) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
+        setClassStr(classStr);
+        setClassPackage(classPackage);
+        setObjectClass(Class.forName(getClassPackage() + '.' + getClassStr()));
+        setObject(getObjectClass().newInstance());
+        for (Object[] field : fields) {
+            String champ = (String) field[0];
+            if(field[1].getClass() == String.class) {
+                set(champ, (String) field[1]);
+            }
+            else {
+                set(champ, Integer.valueOf(field[1].toString()));
+            }
+        }
+    }
+
+    public TestReflexion(Class objectClass, Object[][] fields) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException, NoSuchFieldException {
+        setObjectClass(objectClass);
+        setClassStr(getObjectClass().getName());
+        setClassPackage(getObjectClass().getPackage().toString());
+        setObject(getObjectClass().newInstance());
+        for (Object[] field : fields) {
+            String champ = (String) field[0];
+            if(field[1].getClass() == String.class) {
+                set(champ, (String) field[1]);
+            }
+            else {
+                set(champ, Integer.valueOf(field[1].toString()));
+            }
+        }
+    }
+
     public String getString(String champ) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         if(isString(champ)) {
             Method set=getObjectClass().getMethod("get" + Utils.ucfist(champ));
@@ -134,11 +166,14 @@ public class TestReflexion {
             person.set("prenom", "Nicolas");
             person.set("telephone", "0763207630");
 
-            TestReflexion person2 = new TestReflexion(Person.class);
-            person2.set("id", 2);
-            person2.set("nom", "Choquet");
-            person2.set("prenom", "Yann");
-            person2.set("telephone", "0763207631");
+            TestReflexion person2 = new TestReflexion(Person.class,
+                    new Object[][] {
+                            {"id", 2},
+                            {"nom", "Choquet"},
+                            {"prenom", "Yann"},
+                            {"telephone", "0763207631"}
+                    }
+            );
 
             System.out.println(person.getInt("id"));
             System.out.println(person.getString("nom"));
@@ -151,6 +186,7 @@ public class TestReflexion {
             System.out.println(person2.getString("nom"));
             System.out.println(person2.getString("prenom"));
             System.out.println(person2.getString("telephone"));
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
