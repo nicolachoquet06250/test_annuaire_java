@@ -96,6 +96,8 @@ public class ExempleBoxLayout extends JFrame {
             e.printStackTrace();
         }
         pack();
+        ImageIcon icon = new ImageIcon("src/main/resources/images/annuaire.png");
+        setIconImage(icon.getImage());
         setResizable(true);
     }
 
