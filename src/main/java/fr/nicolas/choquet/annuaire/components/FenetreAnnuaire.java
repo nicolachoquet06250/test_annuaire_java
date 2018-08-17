@@ -13,9 +13,10 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.*;
 
-public class ExempleBoxLayout extends JFrame {
+public class FenetreAnnuaire extends JFrame {
 
     private static String file = "fichier1.json";
+    private static String imagesPath = "src/main/resources/images";
     private JPanel panel = null;
 
     @Override
@@ -36,7 +37,7 @@ public class ExempleBoxLayout extends JFrame {
 
         setScrollPane();
 
-        File file = new File(ExempleBoxLayout.file);
+        File file = new File(FenetreAnnuaire.file);
 
         try {
             PersonArray personArray = PersonArray.initialize(file.read());
@@ -96,8 +97,7 @@ public class ExempleBoxLayout extends JFrame {
             e.printStackTrace();
         }
         pack();
-        ImageIcon icon = new ImageIcon("src/main/resources/images/annuaire.png");
-        setIconImage(icon.getImage());
+        addIcon("annuaire", "png");
         setResizable(true);
     }
 
@@ -109,9 +109,6 @@ public class ExempleBoxLayout extends JFrame {
         MyJTextField titleTextField = new MyJTextField(titre);
         titleTextField.setEnabled(false);
 
-//        JLabel label = new JLabel(titre);
-//        label.setLabelFor(components[0]);
-//        panel.add(label);
         panel.add(titleTextField);
 
         for (JComponent component : components) {
@@ -150,6 +147,11 @@ public class ExempleBoxLayout extends JFrame {
         add(panel);
     }
 
+    private void addIcon(String image, String extension) {
+        ImageIcon icon = new ImageIcon(imagesPath + "/icons/" + image + "." + extension);
+        setIconImage(icon.getImage());
+    }
+
     private void setScrollPane() {
         JPanel panel = new JPanel();
         JScrollPane scrollPane = new JScrollPane(panel);
@@ -163,18 +165,6 @@ public class ExempleBoxLayout extends JFrame {
 
     private boolean hasScrollPane() {
         return panel != null;
-    }
-
-    public static void main(String[] args) {
-        JFrame window = new ExempleBoxLayout();
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-    }
-
-    public static void main() {
-        JFrame window = new ExempleBoxLayout();
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
     }
 
 }

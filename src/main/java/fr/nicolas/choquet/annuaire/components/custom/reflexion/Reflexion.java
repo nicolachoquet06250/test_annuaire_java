@@ -1,31 +1,29 @@
-package fr.nicolas.choquet.annuaire;
+package fr.nicolas.choquet.annuaire.components.custom.reflexion;
 
-import fr.nicolas.choquet.annuaire.components.custom.reflexion.ReflexionResponseObject;
-import fr.nicolas.choquet.annuaire.entities.Person;
 import fr.nicolas.choquet.annuaire.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class TestReflexion {
+public class Reflexion {
     private String classStr;
     private Object object;
     private Class objectClass;
     private String classPackage;
 
-    public TestReflexion(String classPackage, String classStr) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public Reflexion(String classPackage, String classStr) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         setClassStr(classStr);
         setClassPackage(classPackage);
         setObjectClass(Class.forName(getClassPackage() + '.' + getClassStr()));
         setObject(getObjectClass().newInstance());
     }
-    public TestReflexion(Class objectClass) throws IllegalAccessException, InstantiationException {
+    public Reflexion(Class objectClass) throws IllegalAccessException, InstantiationException {
         setObjectClass(objectClass);
         setClassStr(getObjectClass().getName());
         setClassPackage(getObjectClass().getPackage().toString());
         setObject(getObjectClass().newInstance());
     }
-    public TestReflexion(String classPackage, String classStr, Object[][] fields) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public Reflexion(String classPackage, String classStr, Object[][] fields) throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         setClassStr(classStr);
         setClassPackage(classPackage);
         setObjectClass(Class.forName(getClassPackage() + '.' + getClassStr()));
@@ -40,7 +38,7 @@ public class TestReflexion {
             }
         }
     }
-    public TestReflexion(Class objectClass, Object[][] fields) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public Reflexion(Class objectClass, Object[][] fields) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         setObjectClass(objectClass);
         setClassStr(getObjectClass().getName());
         setClassPackage(getObjectClass().getPackage().toString());
@@ -159,49 +157,5 @@ public class TestReflexion {
             }
         }
         return false;
-    }
-
-
-
-    public static void main(String[] argv) {
-        try {
-            TestReflexion person = new TestReflexion("fr.nicolas.choquet.annuaire.entities", "Person");
-            person.set("id", 1);
-            person.set("nom", "Choquet");
-            person.set("prenom", "Nicolas");
-            person.set("telephone", "0763207630");
-
-            TestReflexion person2 = new TestReflexion(Person.class,
-                    new Object[][] {
-                            {"id", 2},
-                            {"nom", "Choquet"},
-                            {"prenom", "Yann"},
-                            {"telephone", "0763207631"}
-                    }
-            );
-
-            System.out.println(person.getInt("id"));
-            System.out.println(person.getString("nom"));
-            System.out.println(person.getString("prenom"));
-            System.out.println(person.getString("telephone"));
-
-            System.out.println("\n");
-
-            System.out.println(person2.getInt("id"));
-            System.out.println(person2.getString("nom"));
-            System.out.println(person2.getString("prenom"));
-            System.out.println(person2.getString("telephone"));
-
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }
