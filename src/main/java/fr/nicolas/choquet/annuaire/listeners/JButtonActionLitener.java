@@ -1,6 +1,6 @@
 package fr.nicolas.choquet.annuaire.listeners;
 
-import fr.nicolas.choquet.annuaire.components.custom.MyJTextField;
+import fr.nicolas.choquet.annuaire.components.custom.swing.MyJTextField;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

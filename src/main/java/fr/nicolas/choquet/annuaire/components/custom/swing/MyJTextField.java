@@ -1,4 +1,4 @@
-package fr.nicolas.choquet.annuaire.components.custom;
+package fr.nicolas.choquet.annuaire.components.custom.swing;
 
 
 import java.awt.Rectangle;
